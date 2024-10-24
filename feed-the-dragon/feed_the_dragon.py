@@ -11,7 +11,7 @@ COIN_ACCELERATION = 0.5
 BUFFER_DISTANCE = 100
 
 display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption("Feed the Dragon")
+pygame.display.set_caption("Feed the Dragon!")
 
 FPS=100
 clock= pygame.time.Clock()
@@ -26,14 +26,14 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 RED = (255,0,0)
 
-font = pygame.font.SysFont('savoyelet', 32)
+font = pygame.font.SysFont('savoyelet', 48)
 large_font = pygame.font.SysFont('savoyelet', 60)
 
 score_text = font.render("Score: " + str(score), True, GREEN, BLACK)
 score_rect = score_text.get_rect()
 score_rect.topleft = (10,10)
 
-title_text = large_font.render("Feed the Dragon", True, RED, BLACK)
+title_text = large_font.render("Feed the Dragon!", True, RED, BLACK)
 title_rect = title_text.get_rect()
 title_rect.centerx = WINDOW_WIDTH // 2
 title_rect.top = 4
@@ -42,11 +42,11 @@ lives_text = font.render("Lives: " + str(player_lives), True, GREEN, BLACK)
 lives_rect = lives_text.get_rect()
 lives_rect.topright = (WINDOW_WIDTH - 10,10)
 
-game_over_text = large_font.render("GAME OVER", True, GREEN, DARK_GREEN)
+game_over_text = large_font.render("GAME OVER", True, RED, BLACK)
 game_over_rect = game_over_text.get_rect()
 game_over_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
 
-continue_text = font.render("Press any key to play again", True, GREEN, DARK_GREEN)
+continue_text = font.render("Press any key to play again", True, GREEN, BLACK)
 continue_rect = continue_text.get_rect()
 continue_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 48)
 
@@ -83,9 +83,10 @@ fire_images_L = [fire_blank, fire_image1_L, fire_image2_L, fire_image3_L, fire_i
 fire_index = 0
 fire_rect = fire_blank.get_rect()
 
-pygame.mixer.music.load("BossBattle.mp3")
-pygame.mixer.music.set_volume(0.3)
-pygame.mixer.music.play(-1,0)
+def start_music():
+    pygame.mixer.music.load("BossBattle.mp3")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1,0)
 
 def reset_coin():
     if coin_direction == -1:
@@ -95,6 +96,10 @@ def reset_coin():
         coin_rect.x = - BUFFER_DISTANCE
         coin_rect.y = random.randint(64, WINDOW_HEIGHT - 64)
 
+def game_over():
+    return player_lives <= 0
+
+start_music()
 
 running = True
 while running:
@@ -103,10 +108,8 @@ while running:
         if (event.type == pygame.QUIT):
             running = False
         if (event.type == pygame.KEYDOWN):
-            if player_lives == 0:
-                pygame.mixer.music.load("BossBattle.mp3")
-                pygame.mixer.music.set_volume(0.3)
-                pygame.mixer.music.play(-1,0)
+            if game_over():
+                start_music()
                 score = 0
                 player_lives = PLAYER_STARTING_LIVES
                 coin_velocity = COIN_STARTING_VELOCITY
@@ -128,7 +131,7 @@ while running:
         player_rect.left += PLAYER_VELOCITY
         player_image = player_image_right
 
-    if player_lives > 0:
+    if not game_over():
         if (coin_direction == -1 and coin_rect.x < 0) or (coin_direction == 1 and coin_rect.x > WINDOW_WIDTH):
             player_lives -= 1
             miss_sound.play()
@@ -143,16 +146,16 @@ while running:
             coin_direction = ((score // 5) % 2) * 2 - 1
             reset_coin()
 
-    score_text = font.render("Score: " + str(score), True, GREEN, BLACK)
-    lives_text = font.render("Lives: " + str(player_lives), True, GREEN, BLACK)
-
     display_surface.fill(BLACK)
 
+    score_text = font.render("Score: " + str(score), True, GREEN, BLACK)
+    lives_text = font.render("Lives: " + str(player_lives), True, GREEN, BLACK)
     display_surface.blit(score_text, score_rect)
     display_surface.blit(title_text, title_rect)
     display_surface.blit(lives_text, lives_rect)    
+    pygame.draw.line(display_surface, WHITE, (0,64), (WINDOW_WIDTH, 64), 2)
 
-    if player_lives <= 0:
+    if game_over():
         display_surface.blit(game_over_text, game_over_rect)
         display_surface.blit(continue_text, continue_rect)
     else:    
@@ -173,7 +176,6 @@ while running:
     if (fire_index >= len(fire_images_L)):
         fire_index = 0
     
-    pygame.draw.line(display_surface, WHITE, (0,64), (WINDOW_WIDTH, 64), 2)
 
     clock.tick(FPS)
 
