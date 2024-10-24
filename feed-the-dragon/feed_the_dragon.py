@@ -24,15 +24,16 @@ GREEN = (0,255,0)
 DARK_GREEN = (10,50,10)
 BLACK = (0,0,0)
 WHITE = (255,255,255)
+RED = (255,0,0)
 
-font = pygame.font.SysFont('calibri', 32)
-large_font = pygame.font.SysFont('calibri', 48)
+font = pygame.font.SysFont('savoyelet', 32)
+large_font = pygame.font.SysFont('savoyelet', 60)
 
 score_text = font.render("Score: " + str(score), True, GREEN, BLACK)
 score_rect = score_text.get_rect()
 score_rect.topleft = (10,10)
 
-title_text = large_font.render("Feed the Dragon", True, GREEN, BLACK)
+title_text = large_font.render("Feed the Dragon", True, RED, BLACK)
 title_rect = title_text.get_rect()
 title_rect.centerx = WINDOW_WIDTH // 2
 title_rect.top = 4
@@ -50,9 +51,11 @@ continue_rect = continue_text.get_rect()
 continue_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 48)
 
 coin_sound = pygame.mixer.Sound("coin_sound.wav")
-coin_sound.set_volume(0.1)
+coin_sound.set_volume(0.3)
 miss_sound = pygame.mixer.Sound("miss_sound.wav")
-miss_sound.set_volume(0.1)
+miss_sound.set_volume(1)
+roar_sound = pygame.mixer.Sound("roar.wav")
+roar_sound.set_volume(1)
 
 player_image_left = pygame.image.load("Dragon_Left_64.png")
 player_image_right = pygame.image.load("Dragon_Right_64.png")
@@ -80,8 +83,8 @@ fire_images_L = [fire_blank, fire_image1_L, fire_image2_L, fire_image3_L, fire_i
 fire_index = 0
 fire_rect = fire_blank.get_rect()
 
-pygame.mixer.music.load("encounter.wav")
-pygame.mixer.music.set_volume(0.05)
+pygame.mixer.music.load("BossBattle.mp3")
+pygame.mixer.music.set_volume(0.3)
 pygame.mixer.music.play(-1,0)
 
 def reset_coin():
@@ -101,8 +104,9 @@ while running:
             running = False
         if (event.type == pygame.KEYDOWN):
             if player_lives == 0:
-                pygame.mixer.music.rewind()
-                pygame.mixer.music.unpause()
+                pygame.mixer.music.load("BossBattle.mp3")
+                pygame.mixer.music.set_volume(0.3)
+                pygame.mixer.music.play(-1,0)
                 score = 0
                 player_lives = PLAYER_STARTING_LIVES
                 coin_velocity = COIN_STARTING_VELOCITY
@@ -110,6 +114,7 @@ while running:
                 reset_coin()
             elif event.key == pygame.K_SPACE:
                 fire_index = 1
+                roar_sound.play()
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP] and player_rect.top > 64:
@@ -124,7 +129,6 @@ while running:
         player_image = player_image_right
 
     if player_lives > 0:
-        
         if (coin_direction == -1 and coin_rect.x < 0) or (coin_direction == 1 and coin_rect.x > WINDOW_WIDTH):
             player_lives -= 1
             miss_sound.play()
@@ -138,8 +142,6 @@ while running:
             coin_velocity += COIN_ACCELERATION
             coin_direction = ((score // 5) % 2) * 2 - 1
             reset_coin()
-    else:
-        pygame.mixer.music.pause()
 
     score_text = font.render("Score: " + str(score), True, GREEN, BLACK)
     lives_text = font.render("Lives: " + str(player_lives), True, GREEN, BLACK)
