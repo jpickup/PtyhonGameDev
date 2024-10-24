@@ -1,3 +1,4 @@
+from time import sleep
 import pygame, random, math
 
 pygame.init()
@@ -50,41 +51,41 @@ continue_text = font.render("Press any key to play again", True, GREEN, BLACK)
 continue_rect = continue_text.get_rect()
 continue_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 48)
 
-coin_sound = pygame.mixer.Sound("coin_sound.wav")
+coin_sound = pygame.mixer.Sound("feed-the-dragon/coin_sound.wav")
 coin_sound.set_volume(0.3)
-miss_sound = pygame.mixer.Sound("miss_sound.wav")
+miss_sound = pygame.mixer.Sound("feed-the-dragon/miss_sound.wav")
 miss_sound.set_volume(1)
-roar_sound = pygame.mixer.Sound("roar.wav")
+roar_sound = pygame.mixer.Sound("feed-the-dragon/roar.wav")
 roar_sound.set_volume(1)
 
-player_image_left = pygame.image.load("Dragon_Left_64.png")
-player_image_right = pygame.image.load("Dragon_Right_64.png")
+player_image_left = pygame.image.load("feed-the-dragon/Dragon_Left_64.png")
+player_image_right = pygame.image.load("feed-the-dragon/Dragon_Right_64.png")
 player_image = player_image_right
 player_rect = player_image.get_rect()
 player_rect.left = 32
 player_rect.centery = WINDOW_HEIGHT // 2
 
-coin_image = pygame.image.load("coin_64.png")
+coin_image = pygame.image.load("feed-the-dragon/coin_64.png")
 coin_rect = coin_image.get_rect()
 coin_rect.x = WINDOW_WIDTH + BUFFER_DISTANCE
 coin_rect.y = random.randint(64, WINDOW_HEIGHT - 64)
 
-fire_blank = pygame.image.load("blank.png")
-fire_image1_R = pygame.image.load("fire1R.png")
-fire_image2_R = pygame.image.load("fire2R.png")
-fire_image3_R = pygame.image.load("fire3R.png")
-fire_image4_R = pygame.image.load("fire4R.png")
-fire_image1_L = pygame.image.load("fire1L.png")
-fire_image2_L = pygame.image.load("fire2L.png")
-fire_image3_L = pygame.image.load("fire3L.png")
-fire_image4_L = pygame.image.load("fire4L.png")
+fire_blank = pygame.image.load("feed-the-dragon/blank.png")
+fire_image1_R = pygame.image.load("feed-the-dragon/fire1R.png")
+fire_image2_R = pygame.image.load("feed-the-dragon/fire2R.png")
+fire_image3_R = pygame.image.load("feed-the-dragon/fire3R.png")
+fire_image4_R = pygame.image.load("feed-the-dragon/fire4R.png")
+fire_image1_L = pygame.image.load("feed-the-dragon/fire1L.png")
+fire_image2_L = pygame.image.load("feed-the-dragon/fire2L.png")
+fire_image3_L = pygame.image.load("feed-the-dragon/fire3L.png")
+fire_image4_L = pygame.image.load("feed-the-dragon/fire4L.png")
 fire_images_R = [fire_blank, fire_image1_R, fire_image2_R, fire_image3_R, fire_image4_R]
 fire_images_L = [fire_blank, fire_image1_L, fire_image2_L, fire_image3_L, fire_image4_L]
 fire_index = 0
 fire_rect = fire_blank.get_rect()
 
 def start_music():
-    pygame.mixer.music.load("BossBattle.mp3")
+    pygame.mixer.music.load("feed-the-dragon/BossBattle.mp3")
     pygame.mixer.music.set_volume(0.3)
     pygame.mixer.music.play(-1,0)
 
@@ -158,6 +159,7 @@ while running:
     if game_over():
         display_surface.blit(game_over_text, game_over_rect)
         display_surface.blit(continue_text, continue_rect)
+        sleep(1)
     else:    
         display_surface.blit(player_image, player_rect)
         if player_image == player_image_left:
@@ -175,7 +177,6 @@ while running:
         fire_index += 0.25
     if (fire_index >= len(fire_images_L)):
         fire_index = 0
-    
 
     clock.tick(FPS)
 

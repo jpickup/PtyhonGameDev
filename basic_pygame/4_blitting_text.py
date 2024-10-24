@@ -16,7 +16,7 @@ fonts = pygame.font.get_fonts()
 for font in fonts:
     print(font)
 
-system_font = pygame.font.SysFont('damascus', 64)
+system_font = pygame.font.SysFont('comicsansms', 64)
 custom_font = pygame.font.Font('StreetfunkGraffiti-woBdn.otf', 48)
 
 system_text = system_font.render("Dragons Rule!", True, GREEN, DARK_GREEN)
