@@ -46,6 +46,11 @@ fruits = [apple_image, banana_image, cherry_image, coconut_image, strawberry_ima
 fruit_colours = [GREEN, YELLOW, MAGENTA, CYAN, RED]
 fruit_image_rect = apple_image.get_rect()
 
+munch_sound = pygame.mixer.Sound("snake/munch.mp3")
+munch_sound.set_volume(1)
+crash_sound = pygame.mixer.Sound("snake/crash.mp3")
+crash_sound.set_volume(1)
+
 small_font = pygame.font.SysFont('comicsansms', 32)
 font = pygame.font.SysFont('comicsansms', 64)
 game_over_text = font.render("Game Over!", True, RED, BLACK)
@@ -113,7 +118,7 @@ def construct_segments(pos, length, points):
     idx = 0
     curr_pos = pos
     colour = DARK_GREEN
-    while used < length:
+    while used < length and idx < len(points):
         remain = length - used
         prev_used = used
         point_data = points[idx]
@@ -172,6 +177,7 @@ def draw_score(score):
 
 running = True
 game_over = False
+was_game_over = False
 fruit_idx = 0
 fruit_pos = (WINDOW_WIDTH // 2, WINDOW_HEIGHT * 3 // 4)
 while running:
@@ -208,6 +214,9 @@ while running:
         snake_segments = construct_segments(snake_head_pos, snake_length, turn_points)
 
     game_over = intersects_any(snake_head_pos, border_segments) or intersects_any(snake_head_pos, skip_adjacent(snake_head_pos, snake_segments))
+    if (game_over and not was_game_over):
+        crash_sound.play()
+    was_game_over = game_over
 
     if intersects_fruit(snake_head_pos, fruit_pos):
         score += 1
@@ -216,6 +225,7 @@ while running:
         turn_points.insert(0, (snake_head_pos, fruit_colours[fruit_idx]))
         fruit_idx = random.randint(0, len(fruits)-1)
         fruit_pos = (random.randint(16, WINDOW_WIDTH-32), random.randint(16, WINDOW_HEIGHT-32))
+        munch_sound.play()
 
     draw_score(score)
     if game_over:
