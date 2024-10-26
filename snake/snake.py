@@ -20,7 +20,7 @@ RIGHT = (1, 0)
 UP = (0, -1)
 DOWN = (0, 1)
 clock = pygame.time.Clock()
-
+SNAKE_LENGTH_INCREMENT= 60
 score = 0
 snake_head_pos = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
 snake_length = 50
@@ -57,7 +57,7 @@ game_over_text = font.render("Game Over!", True, RED, BLACK)
 game_over_rect = game_over_text.get_rect()
 game_over_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2)
 
-game_over2_text = small_font.render("Push space to continue", True, RED, BLACK)
+game_over2_text = small_font.render("Push space to continue", True, CYAN, BLACK)
 game_over2_rect = game_over_text.get_rect()
 game_over2_rect.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 80)
 
@@ -220,11 +220,11 @@ while running:
 
     if intersects_fruit(snake_head_pos, fruit_pos):
         score += 1
-        snake_length += 50
+        snake_length += SNAKE_LENGTH_INCREMENT
         velocity += 0.25
         turn_points.insert(0, (snake_head_pos, fruit_colours[fruit_idx]))
         fruit_idx = random.randint(0, len(fruits)-1)
-        fruit_pos = (random.randint(16, WINDOW_WIDTH-32), random.randint(16, WINDOW_HEIGHT-32))
+        fruit_pos = (random.randint(48, WINDOW_WIDTH-48), random.randint(48, WINDOW_HEIGHT-48))
         munch_sound.play()
 
     draw_score(score)
