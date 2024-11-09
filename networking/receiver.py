@@ -4,7 +4,7 @@ import struct
 from data import Data
 
 multicast_group = '224.1.1.1' 
-multicast_port = 12000
+multicast_port = 55000
 
 receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
 try:
