@@ -9,12 +9,14 @@ sender_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_
 sender_socket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, MULTICAST_TTL)
 sender_socket.settimeout(1.0)
 addr = (multicast_group, multicast_port)
-    
+
+idx = 0    
 while True:
-    msg = "Hello world!"
+    idx += 1
+    msg = "Hello world! " + str(idx)
     data = Data(msg)
 
     start = time.time()
     sender_socket.sendto(pickle.dumps(data), addr)
-    print(".")
+    print(str(idx))
     time.sleep(1)

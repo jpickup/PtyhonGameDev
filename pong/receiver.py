@@ -29,5 +29,6 @@ receiver_socket.setsockopt(socket.SOL_IP, socket.IP_ADD_MEMBERSHIP, socket.inet_
 while True:
     message, address = receiver_socket.recvfrom(1024)
     data = pickle.loads(message)
-    print("Message from " + str(address))
-    print(data.toString())
+    #print("Message from " + str(address))
+    if not(data is None) and data.isValid():
+        print(data.toString())

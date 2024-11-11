@@ -10,5 +10,5 @@ class Data():
         self.time = datetime.datetime.now()
 
     def toString(self):
-        return "[" + str(self.id) + "] @" + str(self.time) + " - " + self.message
+        return "[" + str(self.id) + "]@" + str(self.time) + " - " + self.message
 
