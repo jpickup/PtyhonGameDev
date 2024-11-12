@@ -1,38 +1,13 @@
 import pygame
 import random
 import time
-import socket
-from select import select
 from data import Data
 import pickle
+from networking import Network
 
-#networking
-multicast_group = '224.1.1.1' 
-multicast_port = 55000
-MULTICAST_TTL = 32
-sender_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-sender_socket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, MULTICAST_TTL)
-sender_socket.settimeout(1.0)
-addr = (multicast_group, multicast_port)
+network = Network()
 
-receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-try:
-    receiver_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    receiver_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
-except AttributeError as e:
-    print(e)
-    pass
-receiver_socket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 32)
-receiver_socket.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_LOOP, 1)
-
-receiver_socket.bind(('', multicast_port))
-
-host = socket.gethostbyname(socket.gethostname())
-receiver_socket.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF, socket.inet_aton(host))
-receiver_socket.setsockopt(socket.SOL_IP, socket.IP_ADD_MEMBERSHIP, socket.inet_aton(multicast_group) + socket.inet_aton(host))
-receiver_socket.setblocking(0)
-
-player_no = input("Player number: ")
+player_no = 1
 
 pygame.init()
 
@@ -72,10 +47,8 @@ run = True
 direction = [0,1]
 angle = [0,1,2]
 while run:
-    ready = select([receiver_socket], [], [], 0.001)
-    if ready[0]:
-        message, address = receiver_socket.recvfrom(1024)
-        data = pickle.loads(message)
+    if network.has_data():
+        data = network.receive()
         #print("Message from " + str(address))
         if not(data is None) and data.isValid():
             #print(data.toString())
@@ -107,7 +80,7 @@ while run:
             left_paddle_vel = 0
 
     data = Data(player_no, left_paddle_y, (ball_x, ball_y))
-    sender_socket.sendto(pickle.dumps(data), addr)
+    network.send(data)
 
     #Ball movement controls
     if ball_y <= 0 + radius or ball_y >=HEIGHT - radius:
