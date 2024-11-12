@@ -57,10 +57,15 @@ right_paddle_vel = left_paddle_vel = 0
 run = True
 direction = [0,1]
 angle = [0,1,2]
-other_data = None
 while run:
-    if network.has_data():
-        other_data = network.receive()
+    data = Data(player_no, left_paddle_y, (ball_x, ball_y))
+    network.send(data)
+
+    other_data = None
+    while (other_data is None) and network.has_data():
+        net_data = network.receive()
+        if (net_data.is_valid() and net_data.is_other_player(player_no)):
+            other_data = net_data
 
     wn.fill(BLACK)
     for i in pygame.event.get():
@@ -85,9 +90,6 @@ while run:
             right_paddle_vel = 0
         if i.key == pygame.K_a or pygame.K_s:
             left_paddle_vel = 0
-
-    data = Data(player_no, left_paddle_y, (ball_x, ball_y))
-    network.send(data)
 
     #Ball movement controls
     if ball_y <= 0 + radius or ball_y >=HEIGHT - radius:
@@ -183,10 +185,8 @@ while run:
                 right_smash_remaining -= 1
 
     if not(other_data is None):
-        if other_data.player_no != player_no:
-            right_paddle_y = other_data.bat_position
-
-    if not(other_data is None) and other_data.is_master():
+        right_paddle_y = other_data.bat_position
+    if other_data.is_master():
         ball_x = other_data.ball_position[0]
         ball_y = other_data.ball_position[1]
     else:

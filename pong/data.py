@@ -22,3 +22,6 @@ class Data():
     
     def is_master(self):
         return self.player_no == 1
+    
+    def is_other_player(self, my_player_no):
+        return self.player_no != my_player_no
