@@ -5,9 +5,20 @@ from data import Data
 import pickle
 from networking import Network
 
+MAX_STARTUP_PACKETS = 4
+
 network = Network()
 
+#listen for packets
 player_no = 1
+received = 0
+while network.has_data(0.2) and received < MAX_STARTUP_PACKETS:
+    data = network.receive()
+    received += 1
+    if data.player_no >= player_no:
+        player_no = data.player_no + 1
+
+print("I am player no " + str(player_no))
 
 pygame.init()
 
@@ -46,14 +57,10 @@ right_paddle_vel = left_paddle_vel = 0
 run = True
 direction = [0,1]
 angle = [0,1,2]
+other_data = None
 while run:
     if network.has_data():
-        data = network.receive()
-        #print("Message from " + str(address))
-        if not(data is None) and data.isValid():
-            #print(data.toString())
-            if data.player_no != player_no:
-                right_paddle_y = data.bat_position
+        other_data = network.receive()
 
     wn.fill(BLACK)
     for i in pygame.event.get():
@@ -175,11 +182,18 @@ while run:
                 right_smash = 0
                 right_smash_remaining -= 1
 
-    #movements
-    ball_x += ball_vel_x
-    ball_y += ball_vel_y
-    right_paddle_y += right_paddle_vel
-    left_paddle_y += left_paddle_vel
+    if not(other_data is None):
+        if other_data.player_no != player_no:
+            right_paddle_y = other_data.bat_position
+
+    if not(other_data is None) and other_data.is_master():
+        ball_x = other_data.ball_position[0]
+        ball_y = other_data.ball_position[1]
+    else:
+        #movements
+        ball_x += ball_vel_x
+        ball_y += ball_vel_y
+        left_paddle_y += left_paddle_vel
 
     #Scoreboard
     font = pygame.font.SysFont('callibri', 32)

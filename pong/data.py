@@ -17,5 +17,8 @@ class Data():
         except:
             return str(self.player_no)
 
-    def isValid(self):
+    def is_valid(self):
         return hasattr(self, "player_no")
+    
+    def is_master(self):
+        return self.player_no == 1
