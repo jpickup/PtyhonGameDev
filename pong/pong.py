@@ -2,6 +2,7 @@ import pygame
 import random
 import time
 import socket
+from select import select
 from data import Data
 import pickle
 
@@ -29,7 +30,7 @@ receiver_socket.bind(('', multicast_port))
 host = socket.gethostbyname(socket.gethostname())
 receiver_socket.setsockopt(socket.SOL_IP, socket.IP_MULTICAST_IF, socket.inet_aton(host))
 receiver_socket.setsockopt(socket.SOL_IP, socket.IP_ADD_MEMBERSHIP, socket.inet_aton(multicast_group) + socket.inet_aton(host))
-
+receiver_socket.setblocking(0)
 
 player_no = input("Player number: ")
 
@@ -71,13 +72,15 @@ run = True
 direction = [0,1]
 angle = [0,1,2]
 while run:
-    message, address = receiver_socket.recvfrom(1024)
-    data = pickle.loads(message)
-    #print("Message from " + str(address))
-    if not(data is None) and data.isValid():
-        #print(data.toString())
-        if data.player_no != player_no:
-            right_paddle_y = data.bat_position
+    ready = select([receiver_socket], [], [], 0.001)
+    if ready[0]:
+        message, address = receiver_socket.recvfrom(1024)
+        data = pickle.loads(message)
+        #print("Message from " + str(address))
+        if not(data is None) and data.isValid():
+            #print(data.toString())
+            if data.player_no != player_no:
+                right_paddle_y = data.bat_position
 
     wn.fill(BLACK)
     for i in pygame.event.get():
