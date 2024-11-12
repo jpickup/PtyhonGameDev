@@ -13,7 +13,9 @@ network = Network()
 player_no = 1
 received = 0
 while network.has_data(0.2) and received < MAX_STARTUP_PACKETS:
+    print("Has data on startup")
     data = network.receive()
+    print(str(data))
     received += 1
     if data.player_no >= player_no:
         player_no = data.player_no + 1
@@ -184,16 +186,16 @@ while run:
                 right_smash = 0
                 right_smash_remaining -= 1
 
+    #movements
+    ball_x += ball_vel_x
+    ball_y += ball_vel_y
+    left_paddle_y += left_paddle_vel
+
     if not(other_data is None):
         right_paddle_y = other_data.bat_position
-    if other_data.is_master():
-        ball_x = other_data.ball_position[0]
-        ball_y = other_data.ball_position[1]
-    else:
-        #movements
-        ball_x += ball_vel_x
-        ball_y += ball_vel_y
-        left_paddle_y += left_paddle_vel
+        if other_data.is_master():
+            ball_x = other_data.ball_position[0]
+            ball_y = other_data.ball_position[1]
 
     #Scoreboard
     font = pygame.font.SysFont('callibri', 32)
