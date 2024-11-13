@@ -17,7 +17,7 @@ class Network():
         self.sender_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sender_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sender_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        self.sender_socket.settimeout(1.0)
+        #self.sender_socket.settimeout(1.0)
         self.sender_socket.bind((self.local_ip, self.multicast_port))
         #self.receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         #self.receiver_socket.bind(('', self.multicast_port))
