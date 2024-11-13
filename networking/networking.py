@@ -9,7 +9,10 @@ class Network():
         local_hostname = socket.gethostname()
         ip_addresses = socket.gethostbyname_ex(local_hostname)[2]
         filtered_ips = [ip for ip in ip_addresses if not ip.startswith("127.")]
-        self.local_ip = filtered_ips[:1][0]
+        if (len(filtered_ips)>0):
+            self.local_ip = filtered_ips[:1][0]
+        else:
+            self.local_ip = ''
         print(self.local_ip)
         self.sender_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sender_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
