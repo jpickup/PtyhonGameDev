@@ -12,17 +12,15 @@ class Network():
         if (len(filtered_ips)>0):
             self.local_ip = filtered_ips[:1][0]
         else:
-            self.local_ip = ''
-        print(self.local_ip)
+            self.local_ip = None
         self.sender_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sender_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sender_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        #self.sender_socket.settimeout(1.0)
-        self.sender_socket.bind((self.local_ip, self.multicast_port))
-        #self.receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-        #self.receiver_socket.bind(('', self.multicast_port))
-        self.receiver_socket = self.sender_socket
-
+        self.sender_socket.settimeout(1.0)
+        #self.sender_socket.bind((self.local_ip, self.multicast_port))
+        self.receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        self.receiver_socket.bind(('', self.multicast_port))
+        
     def send(self, data):
         self.sender_socket.sendto(pickle.dumps(data), (self.multicast_group, self.multicast_port))
 
