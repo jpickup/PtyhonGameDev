@@ -45,13 +45,14 @@ class Asteroid(pygame.sprite.Sprite):
         self.rect = rect
 
     def break_up(self):
+        self.kill()
         if self.size == 0:
             return []
         else:
             return [
-                Asteroid(self.pos, self.size-1, [self.velocity[0] - 1, self.velocity[1] - 1]),
-                Asteroid(self.pos, self.size-1, [self.velocity[0] - 1, self.velocity[1] + 1]),
-                Asteroid(self.pos, self.size-1, [self.velocity[0] + 1, self.velocity[1] - 1]),
-                Asteroid(self.pos, self.size-1, [self.velocity[0] + 1, self.velocity[1] + 1])
+                Asteroid(self.pos, self.size-1, [self.velocity[0] - 1 + random.random(), self.velocity[1] - 1 + random.random()]),
+                Asteroid(self.pos, self.size-1, [self.velocity[0] - 1 + random.random(), self.velocity[1] + 1 + random.random()]),
+                Asteroid(self.pos, self.size-1, [self.velocity[0] + 1 + random.random(), self.velocity[1] - 1 + random.random()]),
+                Asteroid(self.pos, self.size-1, [self.velocity[0] + 1 + random.random(), self.velocity[1] + 1 + random.random()])
             ]
         

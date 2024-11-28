@@ -69,9 +69,9 @@ while running:
             if (event.key == pygame.K_SPACE):
                 if lives.game_over():
                     lives.reset()
-                    asteroids_group = create_asteroids(level)
-                    score = 0
                     level = 0
+                    score = 0
+                    asteroids_group = create_asteroids(level)
                     ship.set_level(0)
                 else:    
                     if ship.visible:
@@ -91,16 +91,11 @@ while running:
         if ship.visible:
             lives.life_lost()
         ship.reset()
-        # check again after reset, might not be able to start again
-        collided = ship_asteroid_collision(asteroids_group, ship_group)
     
     ast_hit = bullet_asteroid_collision(asteroids_group, bullets_group)
     if ast_hit:
         score += 1
-        asteroids_group.remove(ast_hit)           # remove this asteroid
-        fragments = ast_hit.break_up()
-        print(str(fragments))
-        asteroids_group.add(fragments)    # add any fragments that the astreoid creates when it's destroyed
+        asteroids_group.add(ast_hit.break_up())  # add any fragments that the astreoid creates when it's destroyed
 
     if lives.game_over() or collided:
         ship.hide()

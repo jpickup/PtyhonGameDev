@@ -18,6 +18,10 @@ class Bullet(pygame.sprite.Sprite):
     def update(self):
             self.pos = ((self.pos[0] + self.velocity[0]), 
                         (self.pos[1] + self.velocity[1]))
+            
+            # check if we are outside the screen
+            if self.pos[0] < 0 or self.pos[0] > self.screen_width or self.pos[1] < 0 or self.pos[1] > self.screen_height:
+                self.kill()
             (img, rect) = image_utils.rotate(self.original_image, self.pos, self.centre, -self.angle)
             self.image = img
             self.rect = rect
