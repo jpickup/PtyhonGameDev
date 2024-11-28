@@ -45,12 +45,17 @@ class Asteroid(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image.convert_alpha())
 
     def intersects(self, other):
+        ''' check if the visible parts of this sprite intersect with the other sprite '''
         offset = (
             other.rect.left - self.rect.left,
             other.rect.top - self.rect.top)
         return self.mask.overlap(other.mask, offset)
 
     def break_up(self):
+        ''' 
+        break the asteroid up into a collection of four smaller asteroids unless already the smallest size, in which case just disappear
+        return the list of new, smaller asteroids
+        '''
         self.kill()
         if self.size == 0:
             return []

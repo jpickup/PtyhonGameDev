@@ -40,30 +40,40 @@ class Ship(pygame.sprite.Sprite):
         self.visible = True
 
     def upgrade(self):
+        ''' upgrade to the next level '''
         self.level += 1
 
     def set_level(self, level):
+        ''' set the level to the given value '''
         self.level = level
 
     def turn_left(self):
+        ''' rotate the ship anticlockwise '''
         self.angle = (self.angle - ROTATE_SPEED) % 360
 
     def turn_right(self):
+        ''' rotate the ship clockwise '''
         self.angle = (self.angle + ROTATE_SPEED) % 360
 
     def reset(self):
+        ''' reinitialise back to initial game state: centre of screen with zero velocity '''
         self.thrust = False
         self.angle = 0
         self.pos = self.initial_pos
         self.velocity = (0, 0)
 
     def show(self):
+        ''' show the sprite '''
         self.visible = True
 
     def hide(self):
+        ''' hide the sprite '''
         self.visible = False
 
     def accelerate(self):
+        '''
+        increase the velocity of the ship in the direction it is facing, limiting the speed to a maximum
+        '''
         radangle = math.radians(self.angle)
         self.velocity = (self.velocity[0] + math.sin(radangle) * ACCEL, 
                          self.velocity[1] - math.cos(radangle) * ACCEL)
@@ -93,12 +103,17 @@ class Ship(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image.convert_alpha())
 
     def shoot(self):
+        ''' 
+        shoot a bullet in the direction that the ship is facing with a velcity based on current ship velocity
+        returns a bullet sprite
+        '''
         radangle = math.radians(self.angle)
         bullet_velocity = (self.velocity[0] + math.sin(radangle) * BULLET_VELOCITY, 
                          self.velocity[1] - math.cos(radangle) * BULLET_VELOCITY)
         return Bullet(self.pos, self.angle, bullet_velocity, self.level)
 
     def intersects(self, other):
+        ''' check if the visible parts of this sprite intersect with the other sprite '''
         offset = (
             other.rect.left - self.rect.left,
             other.rect.top - self.rect.top)

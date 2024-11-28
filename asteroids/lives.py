@@ -2,7 +2,6 @@ import pygame, random, math, image_utils
 
 INITIAL_LIVES = 3
 
-
 class Lives(pygame.sprite.Sprite):
     def __init__(self, surface, topright):
         self.surface = surface

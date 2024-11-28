@@ -34,6 +34,7 @@ class Bullet(pygame.sprite.Sprite):
             self.mask = pygame.mask.from_surface(self.image.convert_alpha())
 
     def intersects(self, other):
+        ''' check if the visible parts of this sprite intersect with the other sprite '''
         offset = (
             other.rect.left - self.rect.left,
             other.rect.top - self.rect.top)
