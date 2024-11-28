@@ -46,14 +46,14 @@ ship_group = pygame.sprite.GroupSingle(ship)
 bullets_group = pygame.sprite.Group()
 
 def ship_asteroid_collision(asteroids, ship_group):
-    collisions = pygame.sprite.groupcollide(asteroids, ship_group, False, False)
+    collisions = pygame.sprite.groupcollide(asteroids, ship_group, False, False, lambda s1, s2 : s1.intersects(s2))
     collided = False
     for ast, shp in collisions.items():
         collided = collided or shp 
     return collided
 
 def bullet_asteroid_collision(asteroids, bullets):
-    collisions = pygame.sprite.groupcollide(asteroids, bullets, False, True)
+    collisions = pygame.sprite.groupcollide(asteroids, bullets, False, True, lambda s1, s2 : s1.intersects(s2))
     for ast, blt in collisions.items():
         if blt:
             return ast
@@ -72,6 +72,7 @@ while running:
                     level = 0
                     score = 0
                     asteroids_group = create_asteroids(level)
+                    bullets_group = pygame.sprite.Group()
                     ship.set_level(0)
                 else:    
                     if ship.visible:
@@ -109,6 +110,7 @@ while running:
         lives.bonus_life()
         ship.upgrade()
         asteroids_group = create_asteroids(level)
+        bullets_group = pygame.sprite.Group()
 
     display_surface.fill((0,0,0))
 

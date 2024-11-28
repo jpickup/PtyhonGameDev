@@ -26,6 +26,7 @@ class Ship(pygame.sprite.Sprite):
         super().__init__()
         self.screen_width, self.screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
         self.image = ship_images[0][0]
+        self.mask = pygame.mask.from_surface(self.image.convert_alpha())
         w, h = self.image.get_size()
         self.centre = w // 2, h // 2
         self.thrust = False
@@ -89,9 +90,16 @@ class Ship(pygame.sprite.Sprite):
             self.rect = rect
         else:
             self.image = blank_image
+        self.mask = pygame.mask.from_surface(self.image.convert_alpha())
 
     def shoot(self):
         radangle = math.radians(self.angle)
         bullet_velocity = (self.velocity[0] + math.sin(radangle) * BULLET_VELOCITY, 
                          self.velocity[1] - math.cos(radangle) * BULLET_VELOCITY)
-        return Bullet(self.pos, self.angle, bullet_velocity)
+        return Bullet(self.pos, self.angle, bullet_velocity, self.level)
+
+    def intersects(self, other):
+        offset = (
+            other.rect.left - self.rect.left,
+            other.rect.top - self.rect.top)
+        return self.mask.overlap(other.mask, offset)
