@@ -5,7 +5,7 @@ ROTATE_SPEED = 3
 MAX_VELOCITY = 15
 MAX_VELOCITY_SQUARED = MAX_VELOCITY * MAX_VELOCITY
 ACCEL = 0.25
-BULLET_VELOCITY = 4
+BULLET_VELOCITY = 6
 
 ship1_go_image = pygame.image.load("asteroids/assets/ship1-64-go.png")
 ship1_stop_image = pygame.image.load("asteroids/assets/ship1-64-stop.png")
