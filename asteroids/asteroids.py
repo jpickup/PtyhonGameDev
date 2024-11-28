@@ -33,6 +33,7 @@ game_over_rect2 = game_over_text2.get_rect()
 game_over_rect2.center = (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 40)
 
 def create_asteroids(level): 
+    ''' create a list of asteroids for the specified level '''
     asteroids = pygame.sprite.Group()
     for i in range(level+1):
         asteroid = Asteroid((random.randrange(0, WINDOW_WIDTH), random.randrange(0, WINDOW_HEIGHT)), 2)
@@ -46,6 +47,7 @@ ship_group = pygame.sprite.GroupSingle(ship)
 bullets_group = pygame.sprite.Group()
 
 def ship_asteroid_collision(asteroids, ship_group):
+    ''' check if the ship has collided with an asteroid '''
     collisions = pygame.sprite.groupcollide(asteroids, ship_group, False, False, lambda s1, s2 : s1.intersects(s2))
     collided = False
     for ast, shp in collisions.items():
@@ -53,6 +55,7 @@ def ship_asteroid_collision(asteroids, ship_group):
     return collided
 
 def bullet_asteroid_collision(asteroids, bullets):
+    ''' check if any asteroid has been hit by a bullet, if it has remove the bullet and return the asteroid that has hit '''
     collisions = pygame.sprite.groupcollide(asteroids, bullets, False, True, lambda s1, s2 : s1.intersects(s2))
     for ast, blt in collisions.items():
         if blt:
@@ -77,6 +80,8 @@ while running:
                 else:    
                     if ship.visible:
                         bullets_group.add(ship.shoot())
+            if (event.key == pygame.K_ESCAPE):
+                pygame.quit()
                     
         keys = pygame.key.get_pressed()
 
