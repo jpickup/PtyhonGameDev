@@ -17,19 +17,23 @@ asteroid_large_images = [asteroid1_large_image, asteroid2_large_image, asteroid3
 asteroid_images = [asteroid_small_images, asteroid_med_images, asteroid_large_images]
 
 class Asteroid(pygame.sprite.Sprite):
-    def __init__(self, pos, size):
+    def __init__(self, pos, size, velocity=None):
         super().__init__()        
+        self.size = size
         self.screen_width, self.screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
         self.original_image = asteroid_images[size][random.randint(0, 2)]
         self.image = self.original_image
         w, h = self.image.get_size()
         self.centre = w // 2, h // 2
         self.thrust = False
-        self.spin = random.randint(-3, 3)
+        self.spin = random.randint(-3, 2) * 2 + 1
         self.angle = random.randint(0, 360)
         self.rect = self.image.get_rect()
         self.pos = pos
-        self.velocity = [random.randint(-5,5), random.randint(-5,5)]
+        if velocity == None:
+            self.velocity = [random.randint(-5,5), random.randint(-5,5)]
+        else:
+            self.velocity = velocity
 
     def update(self):
         self.angle = (self.angle + self.spin) % 360
@@ -39,3 +43,15 @@ class Asteroid(pygame.sprite.Sprite):
         #todo
         self.image = img
         self.rect = rect
+
+    def break_up(self):
+        if self.size == 0:
+            return []
+        else:
+            return [
+                Asteroid(self.pos, self.size-1, [self.velocity[0] - 1, self.velocity[1] - 1]),
+                Asteroid(self.pos, self.size-1, [self.velocity[0] - 1, self.velocity[1] + 1]),
+                Asteroid(self.pos, self.size-1, [self.velocity[0] + 1, self.velocity[1] - 1]),
+                Asteroid(self.pos, self.size-1, [self.velocity[0] + 1, self.velocity[1] + 1])
+            ]
+        
