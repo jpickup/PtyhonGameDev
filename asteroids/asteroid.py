@@ -23,7 +23,6 @@ class Asteroid(pygame.sprite.Sprite):
         self.screen_width, self.screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
         self.original_image = asteroid_images[size][random.randint(0, 2)]
         self.image = self.original_image
-        self.mask = pygame.mask.from_surface(self.image.convert_alpha())
         w, h = self.image.get_size()
         self.centre = w // 2, h // 2
         self.thrust = False
@@ -42,14 +41,6 @@ class Asteroid(pygame.sprite.Sprite):
         (img, rect) = image_utils.rotate(self.original_image, self.pos, self.centre, self.angle)
         self.image = img
         self.rect = rect
-        self.mask = pygame.mask.from_surface(self.image.convert_alpha())
-
-    def intersects(self, other):
-        ''' check if the visible parts of this sprite intersect with the other sprite '''
-        offset = (
-            other.rect.left - self.rect.left,
-            other.rect.top - self.rect.top)
-        return self.mask.overlap(other.mask, offset)
 
     def break_up(self):
         ''' 

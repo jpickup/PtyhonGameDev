@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random, image_utils
 from ship import Ship
 from asteroid import Asteroid
 from lives import Lives
@@ -48,7 +48,7 @@ bullets_group = pygame.sprite.Group()
 
 def ship_asteroid_collision(asteroids, ship_group):
     ''' check if the ship has collided with an asteroid '''
-    collisions = pygame.sprite.groupcollide(asteroids, ship_group, False, False, lambda s1, s2 : s1.intersects(s2))
+    collisions = pygame.sprite.groupcollide(asteroids, ship_group, False, False, image_utils.intersects)
     collided = False
     for ast, shp in collisions.items():
         collided = collided or shp 
@@ -56,7 +56,7 @@ def ship_asteroid_collision(asteroids, ship_group):
 
 def bullet_asteroid_collision(asteroids, bullets):
     ''' check if any asteroid has been hit by a bullet, if it has remove the bullet and return the asteroid that has hit '''
-    collisions = pygame.sprite.groupcollide(asteroids, bullets, False, True, lambda s1, s2 : s1.intersects(s2))
+    collisions = pygame.sprite.groupcollide(asteroids, bullets, False, True, image_utils.intersects)
     for ast, blt in collisions.items():
         if blt:
             return ast

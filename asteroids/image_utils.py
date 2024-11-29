@@ -20,3 +20,19 @@ def rotate(image, pos, originPos, angle):
     rotated_image = pygame.transform.rotate(image, angle)
     rotated_image_rect = rotated_image.get_rect(center = rotated_image_center)
     return (rotated_image, rotated_image_rect)
+
+def mask(sprite):
+    return pygame.mask.from_surface(sprite.image.convert_alpha())
+
+def intersects(sprite1, sprite2):
+    ''' check if the visible parts of the two sprites intersect with each other '''
+    # If the rects don't collide then no point checking masks, which is much more expensive
+    if not sprite1.rect.colliderect(sprite2.rect):
+        return False
+    else:
+        offset = (
+            sprite2.rect.left - sprite1.rect.left,
+            sprite2.rect.top - sprite1.rect.top)
+        mask1 = mask(sprite1)
+        mask2 = mask(sprite2)
+        return mask1.overlap(mask2, offset)
