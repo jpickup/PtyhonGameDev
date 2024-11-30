@@ -1,4 +1,4 @@
-import pygame, random, math, image_utils
+import pygame, math, image_utils
 from bullet import Bullet
 
 ROTATE_SPEED = 3
@@ -37,6 +37,10 @@ class Ship(pygame.sprite.Sprite):
         self.initial_pos = pos
         self.pos = pos
         self.visible = True
+        self.laser_sound = pygame.mixer.Sound("asteroids/assets/Laser.mp3")
+        self.laser_sound.set_volume(1)
+        self.thrust_sound = pygame.mixer.Sound("asteroids/assets/Thrust.mp3")
+        self.thrust_sound.set_volume(0.5)
 
     def upgrade(self):
         ''' upgrade to the next level '''
@@ -56,7 +60,7 @@ class Ship(pygame.sprite.Sprite):
 
     def reset(self):
         ''' reinitialise back to initial game state: centre of screen with zero velocity '''
-        self.thrust = False
+        self.stop_thrust()
         self.angle = 0
         self.pos = self.initial_pos
         self.velocity = (0, 0)
@@ -69,10 +73,14 @@ class Ship(pygame.sprite.Sprite):
         ''' hide the sprite '''
         self.visible = False
 
+    def start_thrust(self):
+        self.thrust = True
+
     def accelerate(self):
         '''
         increase the velocity of the ship in the direction it is facing, limiting the speed to a maximum
         '''
+        self.thrust_sound.play()
         radangle = math.radians(self.angle)
         self.velocity = (self.velocity[0] + math.sin(radangle) * ACCEL, 
                          self.velocity[1] - math.cos(radangle) * ACCEL)
@@ -80,15 +88,19 @@ class Ship(pygame.sprite.Sprite):
             excess = math.sqrt(self.velocity[0] * self.velocity[0] + (self.velocity[1] * self.velocity[1])) / MAX_VELOCITY
             self.velocity = (self.velocity[0] / excess, 
                              self.velocity[1] / excess)
-        self.thrust = True
+
+    
+    def stop_thrust(self):
+        self.thrust_sound.stop()
+        self.thrust = False
 
     def update(self):
         if self.visible:
             if self.thrust:
                 self.original_image = ship_images[self.level % 3][0]
+                self.accelerate()
             else:
                 self.original_image = ship_images[self.level % 3][1]
-            self.thrust = False
 
             self.pos = ((self.pos[0] + self.velocity[0]) % self.screen_width, 
                         (self.pos[1] + self.velocity[1]) % self.screen_height)
@@ -105,6 +117,7 @@ class Ship(pygame.sprite.Sprite):
         shoot a bullet in the direction that the ship is facing with a velcity based on current ship velocity
         returns a bullet sprite
         '''
+        self.laser_sound.play()
         radangle = math.radians(self.angle)
         bullet_velocity = (self.velocity[0] + math.sin(radangle) * BULLET_VELOCITY, 
                          self.velocity[1] - math.cos(radangle) * BULLET_VELOCITY)
