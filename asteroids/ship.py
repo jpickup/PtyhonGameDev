@@ -1,4 +1,7 @@
-import pygame, math, image_utils
+import pygame, math, image_utils, os
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+assets_path = os.path.join(dir_path, "assets")
 from bullet import Bullet
 
 ROTATE_SPEED = 3
@@ -7,13 +10,13 @@ MAX_VELOCITY_SQUARED = MAX_VELOCITY * MAX_VELOCITY
 ACCEL = 0.25
 BULLET_VELOCITY = 6
 
-ship1_go_image = pygame.image.load("asteroids/assets/ship1-64-go.png")
-ship1_stop_image = pygame.image.load("asteroids/assets/ship1-64-stop.png")
-ship2_go_image = pygame.image.load("asteroids/assets/ship2-64-go.png")
-ship2_stop_image = pygame.image.load("asteroids/assets/ship2-64-stop.png")
-ship3_go_image = pygame.image.load("asteroids/assets/ship3-64-go.png")
-ship3_stop_image = pygame.image.load("asteroids/assets/ship3-64-stop.png")
-blank_image = pygame.image.load("asteroids/assets/blank.png")
+ship1_go_image = pygame.image.load(os.path.join(assets_path,"ship1-64-go.png"))
+ship1_stop_image = pygame.image.load(os.path.join(assets_path,"ship1-64-stop.png"))
+ship2_go_image = pygame.image.load(os.path.join(assets_path,"ship2-64-go.png"))
+ship2_stop_image = pygame.image.load(os.path.join(assets_path,"ship2-64-stop.png"))
+ship3_go_image = pygame.image.load(os.path.join(assets_path,"ship3-64-go.png"))
+ship3_stop_image = pygame.image.load(os.path.join(assets_path,"ship3-64-stop.png"))
+blank_image = pygame.image.load(os.path.join(assets_path,"blank.png"))
 
 ship1_images = [ship1_go_image, ship1_stop_image]
 ship2_images = [ship2_go_image, ship2_stop_image]
@@ -37,9 +40,9 @@ class Ship(pygame.sprite.Sprite):
         self.initial_pos = pos
         self.pos = pos
         self.visible = True
-        self.laser_sound = pygame.mixer.Sound("asteroids/assets/Laser.mp3")
+        self.laser_sound = pygame.mixer.Sound(os.path.join(assets_path,"Laser.mp3"))
         self.laser_sound.set_volume(1)
-        self.thrust_sound = pygame.mixer.Sound("asteroids/assets/Thrust.mp3")
+        self.thrust_sound = pygame.mixer.Sound(os.path.join(assets_path,"Thrust.mp3"))
         self.thrust_sound.set_volume(0.5)
 
     def upgrade(self):
@@ -122,4 +125,3 @@ class Ship(pygame.sprite.Sprite):
         bullet_velocity = (self.velocity[0] + math.sin(radangle) * BULLET_VELOCITY, 
                          self.velocity[1] - math.cos(radangle) * BULLET_VELOCITY)
         return Bullet(self.pos, self.angle, bullet_velocity, self.level)
-

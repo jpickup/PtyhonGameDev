@@ -1,4 +1,7 @@
-import pygame, random, math, image_utils
+import pygame, random, math, image_utils, os
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+assets_path = os.path.join(dir_path, "assets")
 
 INITIAL_LIVES = 3
 
@@ -9,17 +12,17 @@ class Lives(pygame.sprite.Sprite):
         self.lives = INITIAL_LIVES
         self.level = 0
         self.ship_images = [
-            pygame.image.load("asteroids/assets/ship1-64-stop.png"), 
-            pygame.image.load("asteroids/assets/ship2-64-stop.png"),
-            pygame.image.load("asteroids/assets/ship3-64-stop.png")]
+            pygame.image.load(os.path.join(assets_path,"ship1-64-stop.png")), 
+            pygame.image.load(os.path.join(assets_path,"ship2-64-stop.png")),
+            pygame.image.load(os.path.join(assets_path,"ship3-64-stop.png"))]
     
-        self.die_sound = pygame.mixer.Sound("asteroids/assets/ShipDie.mp3")
+        self.die_sound = pygame.mixer.Sound(os.path.join(assets_path,"ShipDie.mp3"))
         self.die_sound.set_volume(1)
 
-        self.game_over_sound = pygame.mixer.Sound("asteroids/assets/GameOver.mp3")
+        self.game_over_sound = pygame.mixer.Sound(os.path.join(assets_path,"GameOver.mp3"))
         self.game_over_sound.set_volume(1)
 
-        self.level_up_sound = pygame.mixer.Sound("asteroids/assets/LevelUp.mp3")
+        self.level_up_sound = pygame.mixer.Sound(os.path.join(assets_path,"LevelUp.mp3"))
         self.level_up_sound.set_volume(1)
 
 

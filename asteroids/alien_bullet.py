@@ -1,6 +1,8 @@
-import pygame, image_utils
+import pygame, image_utils, os
 
-bullet_image = pygame.image.load("asteroids/assets/alien_bullet.png")
+dir_path = os.path.dirname(os.path.realpath(__file__))
+assets_path = os.path.join(dir_path, "assets")
+bullet_image = pygame.image.load(os.path.join(assets_path, "alien_bullet.png"))
 
 class AlienBullet(pygame.sprite.Sprite):
     def __init__(self, pos, angle, velocity):

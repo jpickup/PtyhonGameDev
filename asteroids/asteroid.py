@@ -1,14 +1,17 @@
-import pygame, random, image_utils
+import pygame, random, image_utils, os
 
-asteroid1_small_image = pygame.image.load("asteroids/assets/asteroid1-64.png")
-asteroid2_small_image = pygame.image.load("asteroids/assets/asteroid2-64.png")
-asteroid3_small_image = pygame.image.load("asteroids/assets/asteroid3-64.png")
-asteroid1_med_image = pygame.image.load("asteroids/assets/asteroid1-128.png")
-asteroid2_med_image = pygame.image.load("asteroids/assets/asteroid2-128.png")
-asteroid3_med_image = pygame.image.load("asteroids/assets/asteroid3-128.png")
-asteroid1_large_image = pygame.image.load("asteroids/assets/asteroid1-256.png")
-asteroid2_large_image = pygame.image.load("asteroids/assets/asteroid2-256.png")
-asteroid3_large_image = pygame.image.load("asteroids/assets/asteroid3-256.png")
+dir_path = os.path.dirname(os.path.realpath(__file__))
+assets_path = os.path.join(dir_path, "assets")
+
+asteroid1_small_image = pygame.image.load(os.path.join(assets_path,"asteroid1-64.png"))
+asteroid2_small_image = pygame.image.load(os.path.join(assets_path,"asteroid2-64.png"))
+asteroid3_small_image = pygame.image.load(os.path.join(assets_path,"asteroid3-64.png"))
+asteroid1_med_image = pygame.image.load(os.path.join(assets_path,"asteroid1-128.png"))
+asteroid2_med_image = pygame.image.load(os.path.join(assets_path,"asteroid2-128.png"))
+asteroid3_med_image = pygame.image.load(os.path.join(assets_path,"asteroid3-128.png"))
+asteroid1_large_image = pygame.image.load(os.path.join(assets_path,"asteroid1-256.png"))
+asteroid2_large_image = pygame.image.load(os.path.join(assets_path,"asteroid2-256.png"))
+asteroid3_large_image = pygame.image.load(os.path.join(assets_path,"asteroid3-256.png"))
 
 asteroid_small_images = [asteroid1_small_image, asteroid2_small_image, asteroid3_small_image]
 asteroid_med_images = [asteroid1_med_image, asteroid2_med_image, asteroid3_med_image]

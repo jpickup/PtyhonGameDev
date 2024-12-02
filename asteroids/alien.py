@@ -1,10 +1,13 @@
-import pygame, math, image_utils, random
+import pygame, math, image_utils, random, os
 from alien_bullet import AlienBullet
 
 BULLET_VELOCITY = 5
 
-ufo_image = pygame.image.load("asteroids/assets/UFO.png")
-blank_image = pygame.image.load("asteroids/assets/blank.png")
+dir_path = os.path.dirname(os.path.realpath(__file__))
+assets_path = os.path.join(dir_path, "assets")
+
+ufo_image = pygame.image.load(os.path.join(assets_path, "UFO.png"))
+blank_image = pygame.image.load(os.path.join(assets_path, "blank.png"))
 
 class Alien(pygame.sprite.Sprite):
     def __init__(self):

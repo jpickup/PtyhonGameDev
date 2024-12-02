@@ -1,9 +1,13 @@
-import pygame, random, image_utils, math
+import pygame, random, image_utils, math, os
 from ship import Ship
 from asteroid import Asteroid
 from lives import Lives
 from menu import Menu
 from alien import Alien
+
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+assets_path = os.path.join(dir_path, "assets")
 
 pygame.init()
 
@@ -36,10 +40,10 @@ waiting_to_spawn = True
 gameMenu = Menu(display_surface)
 
 #Crash sound effect
-crash_sound = pygame.mixer.Sound("asteroids/assets/Crash.mp3")
+crash_sound = pygame.mixer.Sound(os.path.join(assets_path,"Crash.mp3"))
 crash_sound.set_volume(1)
 
-pygame.mixer_music.load("asteroids/assets/Flying_saucer.mp3")
+pygame.mixer_music.load(os.path.join(assets_path,"Flying_saucer.mp3"))
 
 #Set font and score text
 font = pygame.font.SysFont('callibri', 48)

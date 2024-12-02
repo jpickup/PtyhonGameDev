@@ -1,8 +1,11 @@
-import pygame, random, math, image_utils
+import pygame, random, math, image_utils, os
 
-bullet1_image = pygame.image.load("asteroids/assets/bullet1.png")
-bullet2_image = pygame.image.load("asteroids/assets/bullet2.png")
-bullet3_image = pygame.image.load("asteroids/assets/bullet3.png")
+dir_path = os.path.dirname(os.path.realpath(__file__))
+assets_path = os.path.join(dir_path, "assets")
+
+bullet1_image = pygame.image.load(os.path.join(assets_path,"bullet1.png"))
+bullet2_image = pygame.image.load(os.path.join(assets_path,"bullet2.png"))
+bullet3_image = pygame.image.load(os.path.join(assets_path,"bullet3.png"))
 
 bullet_images = [bullet1_image, bullet2_image, bullet3_image]
 

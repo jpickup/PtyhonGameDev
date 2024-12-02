@@ -1,5 +1,8 @@
-import pygame
+import pygame, os
 from enum import Enum
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+assets_path = os.path.join(dir_path, "assets")
 
 WHITE = (255, 255, 255)
 
@@ -13,8 +16,7 @@ class Menu():
         self.screen_width, self.screen_height = pygame.display.Info().current_w, pygame.display.Info().current_h
 
         #Load font
-        self.menu_font = pygame.font.Font('asteroids/assets/Sterion.ttf', 64)
-
+        self.menu_font = pygame.font.Font(os.path.join(assets_path,"Sterion.ttf"), 64)
         #Render text
         self.title_text = self.menu_font.render("ASTEROIDS", True, WHITE)
         self.start_text = self.menu_font.render("PRESS SPACE TO BEGIN", True, WHITE)
